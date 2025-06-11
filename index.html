@@ -477,138 +477,135 @@
         </div>
     </div>
 <script>
-     // เก็บคำอวยพรทั้งหมด (โหลดจาก localStorage ถ้ามี)
-        let allWishes = [];
-        const WISHES_KEY = 'birthday_wishes';
+    // เก็บคำอวยพรทั้งหมด (โหลดจาก localStorage ถ้ามี)
+    let allWishes = [];
+    const WISHES_KEY = 'birthday_wishes';
 
-        function loadWishes() {
-            const saved = localStorage.getItem(WISHES_KEY);
-            if (saved) {
-                try {
-                    allWishes = JSON.parse(saved);
-                } catch (e) {
-                    allWishes = [];
-                }
+    function loadWishes() {
+        const saved = localStorage.getItem(WISHES_KEY);
+        if (saved) {
+            try {
+                allWishes = JSON.parse(saved);
+            } catch (e) {
+                allWishes = [];
             }
         }
+    }
 
-        function saveWishes() {
-            localStorage.setItem(WISHES_KEY, JSON.stringify(allWishes));
-        }
+    function saveWishes() {
+        localStorage.setItem(WISHES_KEY, JSON.stringify(allWishes));
+    }
 
-        loadWishes();
+    loadWishes();
+
+    // สร้าง confetti
+    function createConfetti() {
+        const colors = ['#ff6b6b', '#4ecdc4', '#ffe66d', '#a5dee5', '#d8b5ff'];
+        const container = document.querySelector('.birthday-container');
         
-        // สร้าง confetti
-        function createConfetti() {
-            const colors = ['#ff6b6b', '#4ecdc4', '#ffe66d', '#a5dee5', '#d8b5ff'];
-            const container = document.querySelector('.birthday-container');
-            
-            for (let i = 0; i < 50; i++) {
-                const confetti = document.createElement('div');
-                confetti.className = 'confetti';
-                confetti.style.left = Math.random() * 100 + '%';
-                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
-                confetti.style.animationDelay = Math.random() + 's';
-                confetti.style.width = (Math.random() * 10 + 5) + 'px';
-                confetti.style.height = (Math.random() * 10 + 5) + 'px';
-                container.appendChild(confetti);
-            }
+        for (let i = 0; i < 50; i++) {
+            const confetti = document.createElement('div');
+            confetti.className = 'confetti';
+            confetti.style.left = Math.random() * 100 + '%';
+            confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
+            confetti.style.animationDelay = Math.random() + 's';
+            confetti.style.width = (Math.random() * 10 + 5) + 'px';
+            confetti.style.height = (Math.random() * 10 + 5) + 'px';
+            container.appendChild(confetti);
         }
-        
-        // ควบคุม Popup
-        const popup = document.getElementById('wishPopup');
-        const wishesPopup = document.getElementById('wishesPopup');
-        const openPopupBtn = document.getElementById('openPopup');
-        const viewWishesBtn = document.getElementById('viewWishesBtn');
-        const closePopupBtn = document.getElementById('closePopup');
-        const closeWishesPopupBtn = document.getElementById('closeWishesPopup');
-        const closeWishesBtn = document.getElementById('closeWishesBtn');
-        const cancelWishBtn = document.getElementById('cancelWish');
-        const sendWishBtn = document.getElementById('sendWish');
-        const wishTextarea = document.querySelector('.wish-textarea');
-        const wishesList = document.getElementById('wishesList');
-        
-        // เปิด Popup ส่งคำอวยพร
-        openPopupBtn.addEventListener('click', function() {
-            popup.classList.add('active');
-        });
-        
-        // เปิด Popup อ่านคำอวยพร
-        viewWishesBtn.addEventListener('click', function() {
+    }
+    
+    // ควบคุม Popup
+    const popup = document.getElementById('wishPopup');
+    const wishesPopup = document.getElementById('wishesPopup');
+    const openPopupBtn = document.getElementById('openPopup');
+    const viewWishesBtn = document.getElementById('viewWishesBtn');
+    const closePopupBtn = document.getElementById('closePopup');
+    const closeWishesPopupBtn = document.getElementById('closeWishesPopup');
+    const closeWishesBtn = document.getElementById('closeWishesBtn');
+    const cancelWishBtn = document.getElementById('cancelWish');
+    const sendWishBtn = document.getElementById('sendWish');
+    const wishTextarea = document.querySelector('.wish-textarea');
+    const wishesList = document.getElementById('wishesList');
+    
+    // เปิด Popup ส่งคำอวยพร
+    openPopupBtn.addEventListener('click', function() {
+        popup.classList.add('active');
+    });
+    
+    // เปิด Popup อ่านคำอวยพร
+    viewWishesBtn.addEventListener('click', function() {
+        updateWishesList();
+        wishesPopup.classList.add('active');
+    });
+    
+    // ปิด Popup ส่งคำอวยพร
+    function closeWishPopup() {
+        popup.classList.remove('active');
+        wishTextarea.value = '';
+    }
+    
+    closePopupBtn.addEventListener('click', closeWishPopup);
+    cancelWishBtn.addEventListener('click', closeWishPopup);
+    
+    // ปิด Popup อ่านคำอวยพร
+    function closeWishesPopup() {
+        wishesPopup.classList.remove('active');
+    }
+    
+    closeWishesPopupBtn.addEventListener('click', closeWishesPopup);
+    closeWishesBtn.addEventListener('click', closeWishesPopup);
+    
+    // ส่งคำอวยพร
+    sendWishBtn.addEventListener('click', function() {
+        const wishMessage = wishTextarea.value.trim();
+        if (wishMessage) {
+            allWishes.push(wishMessage);
+            saveWishes();
             updateWishesList();
-            wishesPopup.classList.add('active');
-        });
-        
-        // ปิด Popup ส่งคำอวยพร
-        function closeWishPopup() {
-            popup.classList.remove('active');
-            wishTextarea.value = '';
-        }
-        
-        closePopupBtn.addEventListener('click', closeWishPopup);
-        cancelWishBtn.addEventListener('click', closeWishPopup);
-        
-        // ปิด Popup อ่านคำอวยพร
-        function closeWishesPopup() {
-            wishesPopup.classList.remove('active');
-        }
-        
-        closeWishesPopupBtn.addEventListener('click', closeWishesPopup);
-        closeWishesBtn.addEventListener('click', closeWishesPopup);
-        
-        // ส่งคำอวยพร
-        sendWishBtn.addEventListener('click', function() {
-            const wishMessage = wishTextarea.value.trim();
-            
-            if (wishMessage) {
-                // เพิ่มคำอวยพรลงในอาร์เรย์
-                allWishes.push(wishMessage);
-                saveWishes();
-                updateWishesList(); // เพิ่มบรรทัดนี้เพื่ออัปเดตรายการทันที
-                createConfetti();
-                openPopupBtn.textContent = 'คำอวยพรถูกส่งแล้ว!';
-                setTimeout(() => {
-                    openPopupBtn.textContent = 'ส่งคำอวยพร';
-                }, 2000);
-                
-                // ในที่นี้สามารถเพิ่มโค้ดเพื่อส่งข้อมูลไปยังเซิร์ฟเวอร์ได้
-                console.log('คำอวยพร:', wishMessage);
-                
-                closeWishPopup();
-            } else {
-                alert('กรุณาเขียนคำอวยพรก่อนส่งค่ะ!');
-                wishTextarea.focus();
-            }
-        });
-        
-        // อัพเดทรายการคำอวยพร
-        function updateWishesList() {
-            loadWishes();
-            if (allWishes.length === 0) {
-                wishesList.innerHTML = '<p class="no-wishes">ยังไม่มีคำอวยพร</p>';
-            } else {
-                wishesList.innerHTML = '';
-                allWishes.forEach((wish, index) => {
-                    const wishItem = document.createElement('div');
-                    wishItem.className = 'wish-item';
-                    wishItem.innerHTML = `<strong>คำอวยพร #${index + 1}:</strong><br>${wish}`;
-                    wishesList.appendChild(wishItem);
-                });
-            }
-        }
-
-        // ฟัง event storage เพื่ออัปเดตคำอวยพรข้ามแท็บ/ผู้ใช้
-        window.addEventListener('storage', function(event) {
-            if (event.key === WISHES_KEY) {
-                updateWishesList();
-            }
-        });
-
-        // สร้าง confetti บางส่วนเมื่อโหลดหน้า
-        window.addEventListener('load', function() {
             createConfetti();
-        });
+            openPopupBtn.textContent = 'คำอวยพรถูกส่งแล้ว!';
+            setTimeout(() => {
+                openPopupBtn.textContent = 'ส่งคำอวยพร';
+            }, 2000);
+            // ในที่นี้สามารถเพิ่มโค้ดเพื่อส่งข้อมูลไปยังเซิร์ฟเวอร์ได้
+            console.log('คำอวยพร:', wishMessage);
+            
+            closeWishPopup();
+        } else {
+            alert('กรุณาเขียนคำอวยพรก่อนส่งค่ะ!');
+            wishTextarea.focus();
+        }
+    });
+
+    // อัพเดทรายการคำอวยพร
+    function updateWishesList() {
+        loadWishes();
+        if (allWishes.length === 0) {
+            wishesList.innerHTML = '<p class="no-wishes">ยังไม่มีคำอวยพร</p>';
+        } else {
+            wishesList.innerHTML = '';
+            allWishes.forEach((wish, index) => {
+                const wishItem = document.createElement('div');
+                wishItem.className = 'wish-item';
+                wishItem.innerHTML = `<strong>คำอวยพร #${index + 1}:</strong><br>${wish}`;
+                wishesList.appendChild(wishItem);
+            });
+        }
+    }
+
+    // ฟัง event storage เพื่ออัปเดตคำอวยพรข้ามแท็บ/ผู้ใช้
+    window.addEventListener('storage', function(event) {
+        if (event.key === WISHES_KEY) {
+            updateWishesList();
+        }
+    });
+
+    // สร้าง confetti บางส่วนเมื่อโหลดหน้า
+    window.addEventListener('load', function() {
+        createConfetti();
+    });
     </script>
 </body>
 </html>
