@@ -565,6 +565,7 @@
                 // เพิ่มคำอวยพรลงในอาร์เรย์
                 allWishes.push(wishMessage);
                 saveWishes();
+                updateWishesList(); // เพิ่มบรรทัดนี้เพื่ออัปเดตรายการทันที
                 createConfetti();
                 openPopupBtn.textContent = 'คำอวยพรถูกส่งแล้ว!';
                 setTimeout(() => {
@@ -596,7 +597,14 @@
                 });
             }
         }
-        
+
+        // ฟัง event storage เพื่ออัปเดตคำอวยพรข้ามแท็บ/ผู้ใช้
+        window.addEventListener('storage', function(event) {
+            if (event.key === WISHES_KEY) {
+                updateWishesList();
+            }
+        });
+
         // สร้าง confetti บางส่วนเมื่อโหลดหน้า
         window.addEventListener('load', function() {
             createConfetti();
