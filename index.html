@@ -514,9 +514,27 @@ window.onload = function() {
     const db = firebase.database();
     const wishesRef = db.ref('birthday_wishes');
 
-    // 4. โหลดคำอวยพรจาก Firebase และอัปเดตแบบเรียลไทม์
+    // 5. เมื่อส่งคำอวยพรใหม่ ให้บันทึกลง Firebase (บันทึกแบบ real time โดยใช้ push แทน set array)
+    sendWishBtn.addEventListener('click', function() {
+        const wishMessage = wishTextarea.value.trim();
+        if (wishMessage) {
+            wishesRef.push(wishMessage); // ใช้ push เพื่อบันทึกแบบ real time
+            createConfetti();
+            openPopupBtn.textContent = 'คำอวยพรถูกส่งแล้ว!';
+            setTimeout(() => {
+                openPopupBtn.textContent = 'ส่งคำอวยพร';
+            }, 2000);
+            closeWishPopup();
+        } else {
+            alert('กรุณาเขียนคำอวยพรก่อนส่งค่ะ!');
+            wishTextarea.focus();
+        }
+    });
+
+    // 4. โหลดคำอวยพรจาก Firebase และอัปเดตแบบเรียลไทม์ (รองรับ push)
     function updateWishesListRealtime(snapshot) {
-        const wishes = snapshot.val() || [];
+        const wishesObj = snapshot.val() || {};
+        const wishes = Object.values(wishesObj);
         wishesList.innerHTML = '';
         if (wishes.length === 0) {
             wishesList.innerHTML = '<p class="no-wishes">ยังไม่มีคำอวยพร</p>';
@@ -530,27 +548,6 @@ window.onload = function() {
         }
     }
     wishesRef.on('value', updateWishesListRealtime);
-
-    // 5. เมื่อส่งคำอวยพรใหม่ ให้บันทึกลง Firebase
-    sendWishBtn.addEventListener('click', function() {
-        const wishMessage = wishTextarea.value.trim();
-        if (wishMessage) {
-            wishesRef.once('value').then(snapshot => {
-                const wishes = snapshot.val() || [];
-                wishes.push(wishMessage);
-                wishesRef.set(wishes);
-            });
-            createConfetti();
-            openPopupBtn.textContent = 'คำอวยพรถูกส่งแล้ว!';
-            setTimeout(() => {
-                openPopupBtn.textContent = 'ส่งคำอวยพร';
-            }, 2000);
-            closeWishPopup();
-        } else {
-            alert('กรุณาเขียนคำอวยพรก่อนส่งค่ะ!');
-            wishTextarea.focus();
-        }
-    });
 
     // หมายเหตุ: สามารถลบโค้ดเกี่ยวกับ localStorage ได้ถ้าใช้ Firebase แทนทั้งหมด
 
