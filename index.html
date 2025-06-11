@@ -576,9 +576,9 @@ window.onload = function() {
         sendWishBtn.onclick = function() {
             const wishMessage = wishTextarea.value;
             if (wishMessage && wishMessage.trim() !== "") {
+                // บันทึกลง Firebase ก่อน แล้วค่อยแสดง Action
                 wishesRef.push(wishMessage.trim())
                     .then(function() {
-                        // Action หลังส่งสำเร็จ
                         closeWishPopup();
                         createConfetti();
                         openPopupBtn.textContent = 'คำอวยพรถูกส่งแล้ว!';
