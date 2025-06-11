@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>สุขสันต์วันเกิด!</title>
+    <style>
+        /* Reset และ Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #d0b3b3;
+            overflow-x: hidden;
+        }
+        
+        /* Container */
+        .birthday-container {
+            max-width: 800px;
+            width: 90%;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            position: relative;
+            margin: 2rem;
+            text-align: center;
+            padding-bottom: 2rem;
+        }
+        
+        /* Header */
+        .birthday-header {
+            background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+            padding: 2rem 1rem;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .birthday-title {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            position: relative;
+            z-index: 2;
+        }
+        
+        .birthday-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 2;
+        }
+        
+        /* Balloons */
+        .balloon {
+            position: absolute;
+            width: 40px;
+            height: 50px;
+            border-radius: 50%;
+            opacity: 0.7;
+            z-index: 1;
+        }
+        
+        .balloon::after {
+            content: '';
+            position: absolute;
+            width: 1px;
+            height: 50px;
+            background-color: rgba(255, 255, 255, 0.5);
+            bottom: -50px;
+            left: 50%;
+        }
+        
+        .balloon:nth-child(1) {
+            background-color: purple;
+            top: 20%;
+            left: 10%;
+            transform: rotate(15deg);
+        }
+        
+        .balloon:nth-child(2) {
+            background-color: #4ecdc4;
+            top: 30%;
+            right: 15%;
+            transform: rotate(-10deg);
+        }
+        
+        .balloon:nth-child(3) {
+            background-color: #ffe66d;
+            top: 15%;
+            right: 25%;
+            transform: rotate(5deg);
+        }
+        
+        /* Content */
+        .birthday-content {
+            padding: 2rem;
+        }
+        
+        .birthday-message {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            color: #555;
+        }
+        
+        /* Cake */
+        .cake-container {
+            margin: 2rem auto;
+            width: 200px;
+            position: relative;
+        }
+        
+        .plate {
+            width: 240px;
+            height: 30px;
+            background: #f8f8f8;
+            border-radius: 50%;
+            /* margin: 0 auto; */ /* ลบออก */
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            bottom: -20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .cake {
+            width: 200px;
+            height: 100px;
+            background: linear-gradient(to bottom, #f8c9d1, #f5a1b1);
+            border-radius: 10px 10px 0 0;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .cake-top {
+            width: 200px;
+            height: 30px;
+            background: linear-gradient(to bottom, #f5a1b1, #f18ba0);
+            border-radius: 50%/15px;
+            position: absolute;
+            top: -15px;
+        }
+        
+        .candle {
+            width: 10px;
+            height: 40px;
+            background: linear-gradient(to bottom, #f9f9f9, #ffe66d);
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+            border-radius: 5px;
+        }
+        
+        .flame {
+            width: 15px;
+            height: 25px;
+            background: linear-gradient(to bottom, #fff, #ffe66d, #ff9a44);
+            border-radius: 50% 50% 20% 20%;
+            margin: 0 auto;
+            position: relative;
+            z-index: 3;
+            animation: flicker 1.5s infinite alternate;
+            box-shadow: 0 0 15px #ff9a44;
+        }
+        
+        @keyframes flicker {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(0.9);
+                opacity: 0.8;
+            }
+        }
+        
+        /* Confetti */
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #f00;
+            opacity: 0.7;
+            animation: confetti-fall 5s linear infinite;
+        }
+        
+        @keyframes confetti-fall {
+            0% {
+                transform: translateY(-100px) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(1000px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        /* Button */
+        .birthday-button {
+            background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            margin-top: 1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+        }
+        
+        .birthday-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 107, 107, 0.6);
+        }
+
+        /* ปุ่มอ่านคำอวยพร */
+        .view-wishes-btn {
+            background: linear-gradient(45deg, #4ecdc4, #a5dee5);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            margin-top: 1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(78, 205, 196, 0.4);
+            margin-left: 10px;
+        }
+        
+        .view-wishes-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(78, 205, 196, 0.6);
+        }
+        
+        /* Popup */
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .popup-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .popup-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+            transform: translateY(20px);
+            transition: transform 0.3s ease;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        .popup-overlay.active .popup-content {
+            transform: translateY(0);
+        }
+        
+        .popup-title {
+            color: #ff6b6b;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+        
+        .wish-textarea {
+            width: 100%;
+            height: 150px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+            font-size: 1rem;
+            resize: none;
+            transition: border 0.3s ease;
+        }
+        
+        .wish-textarea:focus {
+            border-color: #ff6b6b;
+            outline: none;
+        }
+        
+        .popup-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .popup-button {
+            padding: 10px 25px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .popup-send {
+            background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+            color: white;
+        }
+        
+        .popup-cancel {
+            background: #f5f5f5;
+            color: #555;
+        }
+        
+        .popup-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .close-popup {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #888;
+            background: none;
+            border: none;
+        }
+
+        /* Popup แสดงคำอวยพร */
+        .wishes-list {
+            max-height: 300px;
+            overflow-y: auto;
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+
+        .wish-item {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            border-left: 4px solid #ff6b6b;
+        }
+
+        .wish-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .no-wishes {
+            color: #888;
+            font-style: italic;
+        }
+
+        /* ปุ่มกลุ่ม */
+        .button-group {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        /* Responsive */
+        @media (max-width: 600px) {
+            .birthday-title {
+                font-size: 2rem;
+            }
+            
+            .birthday-subtitle {
+                font-size: 1rem;
+            }
+            
+            .birthday-content {
+                padding: 1.5rem;
+            }
+            
+            .popup-content {
+                padding: 1.5rem;
+            }
+            
+            .popup-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .button-group {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .view-wishes-btn {
+                margin-left: 0;
+                margin-top: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="birthday-container">
+        <div class="birthday-header">
+            <div class="balloon"></div>
+            <div class="balloon"></div>
+            <div class="balloon"></div>
+            <h1 class="birthday-title">สุขสันต์วันเกิดนะโดม!</h1>
+            <p class="birthday-subtitle">ขอให้มีความสุขมากๆ ในวันพิเศษนี้</p>
+        </div>
+        
+        <div class="birthday-content">
+            <p class="birthday-message">
+                ขอบคุณที่เข้ามาอวยพรผมนะครับ ผมหวังว่าทุกคำอวยพรที่คุณให้ผมมา
+                จะทำให้วันเกิดของผมมีความหมายมากยิ่งขึ้น อยากให้ทุกคนที่เข้ามา
+                มีรอยยิ้มที่สดใสและอบอุ่นนะครับ ขอบคุณอีกครั้งสำหรับการมีอยู่ของคุณในชีวิตผม
+            </p>
+            
+            <div class="cake-container">
+                <div class="flame"></div>
+                <div class="candle"></div>
+                <div class="cake">
+                    <div class="cake-top"></div>
+                </div>
+                <div class="plate"></div>
+            </div>
+            
+            <div class="button-group">
+                <button class="birthday-button" id="openPopup">ส่งคำอวยพร</button>
+                <button class="view-wishes-btn" id="viewWishesBtn">อ่านคำอวยพร</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Popup ส่งคำอวยพร -->
+    <div class="popup-overlay" id="wishPopup">
+        <div class="popup-content">
+            <button class="close-popup" id="closePopup">&times;</button>
+            <h2 class="popup-title">เขียนคำอวยพร</h2>
+            <textarea class="wish-textarea" placeholder="เขียนคำอวยพรที่นี่..."></textarea>
+            <div class="popup-buttons">
+                <button class="popup-button popup-send" id="sendWish">ส่งคำอวยพร</button>
+                <button class="popup-button popup-cancel" id="cancelWish">ยกเลิก</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Popup แสดงคำอวยพร -->
+    <div class="popup-overlay" id="wishesPopup">
+        <div class="popup-content">
+            <button class="close-popup" id="closeWishesPopup">&times;</button>
+            <h2 class="popup-title">คำอวยพรทั้งหมด</h2>
+            <div class="wishes-list" id="wishesList">
+                <p class="no-wishes">ยังไม่มีคำอวยพร</p>
+            </div>
+            <div class="popup-buttons">
+                <button class="popup-button popup-cancel" id="closeWishesBtn">ปิด</button>
+            </div>
+        </div>
+    </div>
+<script>
+     // เก็บคำอวยพรทั้งหมด (โหลดจาก localStorage ถ้ามี)
+        let allWishes = [];
+        const WISHES_KEY = 'birthday_wishes';
+
+        function loadWishes() {
+            const saved = localStorage.getItem(WISHES_KEY);
+            if (saved) {
+                try {
+                    allWishes = JSON.parse(saved);
+                } catch (e) {
+                    allWishes = [];
+                }
+            }
+        }
+
+        function saveWishes() {
+            localStorage.setItem(WISHES_KEY, JSON.stringify(allWishes));
+        }
+
+        loadWishes();
+        
+        // สร้าง confetti
+        function createConfetti() {
+            const colors = ['#ff6b6b', '#4ecdc4', '#ffe66d', '#a5dee5', '#d8b5ff'];
+            const container = document.querySelector('.birthday-container');
+            
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                confetti.style.animationDelay = Math.random() + 's';
+                confetti.style.width = (Math.random() * 10 + 5) + 'px';
+                confetti.style.height = (Math.random() * 10 + 5) + 'px';
+                container.appendChild(confetti);
+            }
+        }
+        
+        // ควบคุม Popup
+        const popup = document.getElementById('wishPopup');
+        const wishesPopup = document.getElementById('wishesPopup');
+        const openPopupBtn = document.getElementById('openPopup');
+        const viewWishesBtn = document.getElementById('viewWishesBtn');
+        const closePopupBtn = document.getElementById('closePopup');
+        const closeWishesPopupBtn = document.getElementById('closeWishesPopup');
+        const closeWishesBtn = document.getElementById('closeWishesBtn');
+        const cancelWishBtn = document.getElementById('cancelWish');
+        const sendWishBtn = document.getElementById('sendWish');
+        const wishTextarea = document.querySelector('.wish-textarea');
+        const wishesList = document.getElementById('wishesList');
+        
+        // เปิด Popup ส่งคำอวยพร
+        openPopupBtn.addEventListener('click', function() {
+            popup.classList.add('active');
+        });
+        
+        // เปิด Popup อ่านคำอวยพร
+        viewWishesBtn.addEventListener('click', function() {
+            updateWishesList();
+            wishesPopup.classList.add('active');
+        });
+        
+        // ปิด Popup ส่งคำอวยพร
+        function closeWishPopup() {
+            popup.classList.remove('active');
+            wishTextarea.value = '';
+        }
+        
+        closePopupBtn.addEventListener('click', closeWishPopup);
+        cancelWishBtn.addEventListener('click', closeWishPopup);
+        
+        // ปิด Popup อ่านคำอวยพร
+        function closeWishesPopup() {
+            wishesPopup.classList.remove('active');
+        }
+        
+        closeWishesPopupBtn.addEventListener('click', closeWishesPopup);
+        closeWishesBtn.addEventListener('click', closeWishesPopup);
+        
+        // ส่งคำอวยพร
+        sendWishBtn.addEventListener('click', function() {
+            const wishMessage = wishTextarea.value.trim();
+            
+            if (wishMessage) {
+                // เพิ่มคำอวยพรลงในอาร์เรย์
+                allWishes.push(wishMessage);
+                saveWishes();
+                createConfetti();
+                openPopupBtn.textContent = 'คำอวยพรถูกส่งแล้ว!';
+                setTimeout(() => {
+                    openPopupBtn.textContent = 'ส่งคำอวยพร';
+                }, 2000);
+                
+                // ในที่นี้สามารถเพิ่มโค้ดเพื่อส่งข้อมูลไปยังเซิร์ฟเวอร์ได้
+                console.log('คำอวยพร:', wishMessage);
+                
+                closeWishPopup();
+            } else {
+                alert('กรุณาเขียนคำอวยพรก่อนส่งค่ะ!');
+                wishTextarea.focus();
+            }
+        });
+        
+        // อัพเดทรายการคำอวยพร
+        function updateWishesList() {
+            loadWishes();
+            if (allWishes.length === 0) {
+                wishesList.innerHTML = '<p class="no-wishes">ยังไม่มีคำอวยพร</p>';
+            } else {
+                wishesList.innerHTML = '';
+                allWishes.forEach((wish, index) => {
+                    const wishItem = document.createElement('div');
+                    wishItem.className = 'wish-item';
+                    wishItem.innerHTML = `<strong>คำอวยพร #${index + 1}:</strong><br>${wish}`;
+                    wishesList.appendChild(wishItem);
+                });
+            }
+        }
+        
+        // สร้าง confetti บางส่วนเมื่อโหลดหน้า
+        window.addEventListener('load', function() {
+            createConfetti();
+        });
+    </script>
+</body>
+</html>
