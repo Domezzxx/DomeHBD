@@ -576,15 +576,35 @@ window.onload = function() {
         sendWishBtn.onclick = function() {
             const wishMessage = wishTextarea.value;
             if (wishMessage && wishMessage.trim() !== "") {
-                wishesRef.push(wishMessage.trim()).catch(function(error) {
-                    console.error('ไม่สามารถบันทึกคำอวยพรได้:', error.message);
-                });
-                createConfetti();
-                openPopupBtn.textContent = 'คำอวยพรถูกส่งแล้ว!';
-                setTimeout(() => {
-                    openPopupBtn.textContent = 'ส่งคำอวยพร';
-                }, 2000);
-                closeWishPopup();
+                wishesRef.push(wishMessage.trim())
+                    .then(function() {
+                        // Action หลังส่งสำเร็จ
+                        closeWishPopup();
+                        createConfetti();
+                        openPopupBtn.textContent = 'คำอวยพรถูกส่งแล้ว!';
+                        // แสดงข้อความขอบคุณแบบ popup เล็กๆ
+                        let toast = document.createElement('div');
+                        toast.textContent = 'ขอบคุณสำหรับคำอวยพร!';
+                        toast.style.position = 'fixed';
+                        toast.style.bottom = '30px';
+                        toast.style.left = '50%';
+                        toast.style.transform = 'translateX(-50%)';
+                        toast.style.background = '#4ecdc4';
+                        toast.style.color = '#fff';
+                        toast.style.padding = '16px 32px';
+                        toast.style.borderRadius = '30px';
+                        toast.style.fontSize = '1.1rem';
+                        toast.style.boxShadow = '0 4px 16px rgba(0,0,0,0.15)';
+                        toast.style.zIndex = 2000;
+                        document.body.appendChild(toast);
+                        setTimeout(() => {
+                            toast.remove();
+                            openPopupBtn.textContent = 'ส่งคำอวยพร';
+                        }, 2000);
+                    })
+                    .catch(function(error) {
+                        console.error('ไม่สามารถบันทึกคำอวยพรได้:', error.message);
+                    });
             } else {
                 wishTextarea.focus();
             }
