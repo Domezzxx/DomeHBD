@@ -416,6 +416,9 @@
             }
         }
     </style>
+    <!-- Firebase SDK (วางไว้ก่อน <script> นี้ หรือใน <head>) -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 </head>
 <body>
     <div class="birthday-container">
@@ -476,7 +479,81 @@
             </div>
         </div>
     </div>
+    
 <script>
+    // ย้ายโค้ดทั้งหมดที่เกี่ยวกับ DOM และ event ไปไว้ใน window.onload เพื่อให้แน่ใจว่า element ถูกสร้างแล้วก่อนใช้งาน
+
+window.onload = function() {
+    // DOM elements
+    const popup = document.getElementById('wishPopup');
+    const wishesPopup = document.getElementById('wishesPopup');
+    const openPopupBtn = document.getElementById('openPopup');
+    const viewWishesBtn = document.getElementById('viewWishesBtn');
+    const closePopupBtn = document.getElementById('closePopup');
+    const closeWishesPopupBtn = document.getElementById('closeWishesPopup');
+    const closeWishesBtn = document.getElementById('closeWishesBtn');
+    const cancelWishBtn = document.getElementById('cancelWish');
+    const sendWishBtn = document.getElementById('sendWish');
+    const wishTextarea = document.querySelector('.wish-textarea');
+    const wishesList = document.getElementById('wishesList');
+
+    // 2. กำหนด config ของ Firebase (เปลี่ยนค่าตามโปรเจกต์ของคุณ)
+    const firebaseConfig = {
+         apiKey: "AIzaSyAcdRFzACteSc7yRX9ttAwtOVXYXptTIww",
+  authDomain: "domehbd.firebaseapp.com",
+  databaseURL: "https://domehbd-default-rtdb.firebaseio.com",
+  projectId: "domehbd",
+  storageBucket: "domehbd.firebasestorage.app",
+  messagingSenderId: "273184942813",
+  appId: "1:273184942813:web:a0ae5d89438d06d43dc934",
+  measurementId: "G-566VMH8XBB"
+    };
+
+    // 3. เริ่มต้น Firebase
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+    const wishesRef = db.ref('birthday_wishes');
+
+    // 4. โหลดคำอวยพรจาก Firebase และอัปเดตแบบเรียลไทม์
+    function updateWishesListRealtime(snapshot) {
+        const wishes = snapshot.val() || [];
+        wishesList.innerHTML = '';
+        if (wishes.length === 0) {
+            wishesList.innerHTML = '<p class="no-wishes">ยังไม่มีคำอวยพร</p>';
+        } else {
+            wishes.forEach((wish, index) => {
+                const wishItem = document.createElement('div');
+                wishItem.className = 'wish-item';
+                wishItem.innerHTML = `<strong>คำอวยพร #${index + 1}:</strong><br>${wish}`;
+                wishesList.appendChild(wishItem);
+            });
+        }
+    }
+    wishesRef.on('value', updateWishesListRealtime);
+
+    // 5. เมื่อส่งคำอวยพรใหม่ ให้บันทึกลง Firebase
+    sendWishBtn.addEventListener('click', function() {
+        const wishMessage = wishTextarea.value.trim();
+        if (wishMessage) {
+            wishesRef.once('value').then(snapshot => {
+                const wishes = snapshot.val() || [];
+                wishes.push(wishMessage);
+                wishesRef.set(wishes);
+            });
+            createConfetti();
+            openPopupBtn.textContent = 'คำอวยพรถูกส่งแล้ว!';
+            setTimeout(() => {
+                openPopupBtn.textContent = 'ส่งคำอวยพร';
+            }, 2000);
+            closeWishPopup();
+        } else {
+            alert('กรุณาเขียนคำอวยพรก่อนส่งค่ะ!');
+            wishTextarea.focus();
+        }
+    });
+
+    // หมายเหตุ: สามารถลบโค้ดเกี่ยวกับ localStorage ได้ถ้าใช้ Firebase แทนทั้งหมด
+
     // เก็บคำอวยพรทั้งหมด (โหลดจาก localStorage ถ้ามี)
     let allWishes = [];
     const WISHES_KEY = 'birthday_wishes';
@@ -517,18 +594,6 @@
     }
     
     // ควบคุม Popup
-    const popup = document.getElementById('wishPopup');
-    const wishesPopup = document.getElementById('wishesPopup');
-    const openPopupBtn = document.getElementById('openPopup');
-    const viewWishesBtn = document.getElementById('viewWishesBtn');
-    const closePopupBtn = document.getElementById('closePopup');
-    const closeWishesPopupBtn = document.getElementById('closeWishesPopup');
-    const closeWishesBtn = document.getElementById('closeWishesBtn');
-    const cancelWishBtn = document.getElementById('cancelWish');
-    const sendWishBtn = document.getElementById('sendWish');
-    const wishTextarea = document.querySelector('.wish-textarea');
-    const wishesList = document.getElementById('wishesList');
-    
     // เปิด Popup ส่งคำอวยพร
     openPopupBtn.addEventListener('click', function() {
         popup.classList.add('active');
@@ -556,7 +621,7 @@
     
     closeWishesPopupBtn.addEventListener('click', closeWishesPopup);
     closeWishesBtn.addEventListener('click', closeWishesPopup);
-    
+
     // ส่งคำอวยพร
     sendWishBtn.addEventListener('click', function() {
         const wishMessage = wishTextarea.value.trim();
@@ -603,9 +668,8 @@
     });
 
     // สร้าง confetti บางส่วนเมื่อโหลดหน้า
-    window.addEventListener('load', function() {
-        createConfetti();
-    });
+    createConfetti();
+};
     </script>
 </body>
 </html>
