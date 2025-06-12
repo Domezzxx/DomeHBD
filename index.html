@@ -125,14 +125,13 @@
         
         .plate {
             width: 240px;
-            height: 30px;
-            background: #de74cc;
+            height: 50px;
+            background: #aa8686;
             border-radius: 50%;
-            /* margin: 0 auto; */ /* ลบออก */
             position: absolute;
             left: 50%;
             transform: translateX(-50%);
-
+            bottom: 0; /* เดิม -20px ปรับเป็น 0 ให้ชิด cake */
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
         
@@ -143,12 +142,12 @@
             background:
                 linear-gradient(
                     to bottom,
-                    #a67c52 0%,      /* top dark brown */
-                    #a67c52 20%,
-                    #e2b07a 20%,     /* middle caramel */
-                    #e2b07a 60%,
-                    #f8c9d1 60%,     /* bottom pinkish */
-                    #f5a1b1 100%
+                    #a0522d 0%,      /* top: chocolate fudge */
+                  
+                    #ffe5b4 18%,     /* middle: vanilla cream */
+                    #ffe5b4 36%,
+                    #ffb6c1 72%,     /* bottom: strawberry cream */
+                    #ff69b4 100%
                 );
             border-radius: 14px 14px 0 0;
             margin: 0 auto;
@@ -161,33 +160,22 @@
             position: absolute;
             left: 0;
             width: 100%;
-            height: 8px;
+            height: 10px;
             border-radius: 8px 8px 0 0;
             z-index: 2;
-            opacity: 0.7;
+            opacity: 0.85;
         }
-        .cake-layer.layer1 {
-            top: 18px;
-            background: #a67c52;
-        }
+       
         .cake-layer.layer2 {
-            top: 48px;
-            background: #e2b07a;
+            top: 46px;
+            background: linear-gradient(to right, #ffe5b4 60%, #fff8dc 40%);
         }
         .cake-layer.layer3 {
-            top: 78px;
-            background: #f5a1b1;
+            top: 76px;
+            background: linear-gradient(to right, #ffb6c1 60%, #ff69b4 40%);
         }
         
-        .cake-top {
-            width: 200px;
-            height: 30px;
-            background: linear-gradient(to bottom, #640c0c, #e76cc8);
-            border-radius: 50%/15px;
-            position: absolute;
-            top: -15px;
-        }
-        
+       
         .candle, .candle.candle-20 {
             width: 10px;
             height: 40px;
