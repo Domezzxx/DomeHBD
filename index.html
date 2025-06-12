@@ -125,7 +125,7 @@
         .plate {
             width: 240px;
             height: 30px;
-            background: #f8f8f8;
+            background: #bd2020;
             border-radius: 50%;
             /* margin: 0 auto; */ /* ลบออก */
             position: absolute;
@@ -414,6 +414,7 @@
                 margin-left: 0;
                 margin-top: 10px;
             }
+          
         }
     </style>
     <!-- Firebase SDK (วางไว้ก่อน <script> นี้ หรือใน <head>) -->
@@ -436,16 +437,18 @@
                 จะทำให้วันเกิดของผมมีความหมายมากยิ่งขึ้น อยากให้ทุกคนที่เข้ามา
                 มีรอยยิ้มที่สดใสและอบอุ่นนะครับ ขอบคุณอีกครั้งสำหรับการมีอยู่ของคุณในชีวิตผม
             </p>
-            
-            <div class="cake-container">
-                <div class="flame"></div>
-                <div class="candle"></div>
-                <div class="cake">
-                    <div class="cake-top"></div>
+            <div style="display: flex; align-items: center; justify-content: center; gap: 10px;">
+                <img src="รูปซ้าย.jpg" alt="รูปภาพทางซ้าย" class="side-image left-image" style="width:60px; height:60px; object-fit:cover; border-radius:50%;">
+                <div class="cake-container">
+                    <div class="flame"></div>
+                    <div class="candle"></div>
+                    <div class="cake">
+                        <div class="cake-top"></div>
+                    </div>
+                    <div class="plate"></div>
                 </div>
-                <div class="plate"></div>
+                <img src="รูปขวา.jpg" alt="รูปภาพทางขวา" class="side-image right-image" style="width:60px; height:60px; object-fit:cover; border-radius:50%;">
             </div>
-            
             <div class="button-group">
                 <button class="birthday-button" id="openPopup">ส่งคำอวยพร</button>
                 <button class="view-wishes-btn" id="viewWishesBtn">อ่านคำอวยพร</button>
