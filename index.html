@@ -219,10 +219,10 @@
             box-shadow: 0 0 25px 8px #ffb347, 0 0 60px 10px #ffe66d;
             filter: blur(0.2px);
             position: absolute;
-            left: 43%;
-            top: -56px;
+            left: -30%;
+            top: -30px;
             transform: translateX(-50%);
-            z-index: 10;
+            z-index: 5;
             margin: 0;
         }
 
@@ -509,6 +509,66 @@
             100% { transform: translateY(-5px) scale(1.08);}
         }
 
+        /* Firework & Balloon Animation CSS */
+        /* Firework */
+        .firework {
+            position: fixed;
+            left: 50%;
+            top: 60%;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 2001;
+            animation: firework-explode 1.2s ease-out forwards;
+        }
+        @keyframes firework-explode {
+            0% { opacity: 1; transform: scale(0.2);}
+            80% { opacity: 1; }
+            100% { opacity: 0; transform: scale(1.5);}
+        }
+        .firework-dot {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            opacity: 0.85;
+        }
+
+        /* Balloon float up */
+        .celebrate-balloon {
+            position: fixed;
+            bottom: -80px;
+            width: 48px;
+            height: 60px;
+            z-index: 2002;
+            animation: balloon-float 2.8s cubic-bezier(.4,.01,.6,1) forwards;
+            pointer-events: none;
+        }
+        @keyframes balloon-float {
+            0% { transform: translateY(0);}
+            80% { }
+            100% { transform: translateY(-110vh);}
+        }
+        .celebrate-balloon-shape {
+            width: 48px;
+            height: 60px;
+            border-radius: 50% 50% 48% 48%/60% 60% 40% 40%;
+            position: absolute;
+            left: 0; top: 0;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.08);
+        }
+        .celebrate-balloon-string {
+            width: 2px;
+            height: 38px;
+            background: #aaa;
+            position: absolute;
+            left: 50%;
+            top: 60px;
+            transform: translateX(-50%);
+            border-radius: 2px;
+        }
+
         /* Responsive */
         @media (max-width: 600px) {
             .birthday-title {
@@ -568,10 +628,12 @@
                 <!-- ใช้ URL รูปภาพที่อยู่บนอินเทอร์เน็ต (เช่น GitHub หรือบริการฝากรูป) -->
                 <img src="https://raw.githubusercontent.com/Domezzxx/DomeHBD/main/รูปซ้าย.jpg" alt="รูปภาพทางซ้าย" class="side-image left-image" style="width:60px; height:60px; object-fit:cover; border-radius:50%;">
                 <div class="cake-container">
-                    <div class="flame"></div>
-                    <div class="candle"></div>
+                    <div class="candle">
+                        <div class="flame"></div>
+                    </div>
                     <div class="candle candle-20">
                         <span class="candle-number">20</span>
+                       
                     </div>
                     <div class="cake">
                         <div class="cake-top"></div>
@@ -754,6 +816,59 @@ window.onload = function() {
             }
         };
     }
+
+    // Firework and Balloon Animation
+    function showFireworksAndBalloons() {
+        // Fireworks
+        for (let i = 0; i < 4; i++) {
+            setTimeout(() => createFirework(), 350 * i);
+        }
+        // Balloons
+        for (let i = 0; i < 5; i++) {
+            setTimeout(() => createBalloon(i), 400 + i * 220);
+        }
+    }
+    function createFirework() {
+        const colors = ['#ff2d55','#ffd600','#00e676','#2979ff','#ff9100','#fff','#ffb6c1','#ffe066'];
+        const firework = document.createElement('div');
+        firework.className = 'firework';
+        firework.style.left = (20 + Math.random()*60) + 'vw';
+        firework.style.top = (25 + Math.random()*25) + 'vh';
+        // Create dots
+        for (let i = 0; i < 12; i++) {
+            const dot = document.createElement('div');
+            dot.className = 'firework-dot';
+            const angle = (i / 12) * 2 * Math.PI;
+            const dist = 38 + Math.random()*18;
+            dot.style.background = colors[Math.floor(Math.random()*colors.length)];
+            dot.style.left = 20 + Math.cos(angle)*dist + 'px';
+            dot.style.top = 20 + Math.sin(angle)*dist + 'px';
+            firework.appendChild(dot);
+        }
+        document.body.appendChild(firework);
+        setTimeout(() => firework.remove(), 1400);
+    }
+    function createBalloon(idx) {
+        const balloon = document.createElement('div');
+        balloon.className = 'celebrate-balloon';
+        balloon.style.left = (10 + Math.random()*80) + 'vw';
+        balloon.style.animationDelay = (idx*0.1) + 's';
+        // Balloon color
+        const colors = ['#ff2d55','#ffd600','#00e676','#2979ff','#ff9100','#ffb6c1','#ffe066'];
+        const shape = document.createElement('div');
+        shape.className = 'celebrate-balloon-shape';
+        shape.style.background = colors[idx % colors.length];
+        shape.style.border = '2.5px solid #fff';
+        balloon.appendChild(shape);
+        const string = document.createElement('div');
+        string.className = 'celebrate-balloon-string';
+        balloon.appendChild(string);
+        document.body.appendChild(balloon);
+        setTimeout(() => balloon.remove(), 3200);
+    }
+
+    // เรียกแค่ครั้งเดียว (ไม่ต้องซ้ำทั้ง DOMContentLoaded และ load)
+    setTimeout(showFireworksAndBalloons, 350);
 };
 </script>
 
